@@ -1,12 +1,22 @@
-from sqlalchemy import Column, Integer, String, DateTime
+import enum
+from datetime import datetime
 
-from app.storages.models.base_model import Base
+from sqlalchemy import DateTime
+from sqlalchemy.orm import Mapped, relationship, mapped_column
+
+from app.storages.models.base_model import BaseOrm
 
 
-class Order(Base):
+class OrderStatus(enum.Enum):
+    in_process = 'in_process'
+    posted = 'posted'
+    delivered = 'delivered'
+
+
+class OrderOrm(BaseOrm):
     __tablename__ = 'orders'
 
-    created_at = Column(DateTime)
-    status = Column(String)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    status: Mapped[OrderStatus]
 
-
+    order_items = relationship("OrderItemOrm", back_populates="order")
