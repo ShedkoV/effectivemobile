@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -13,7 +15,7 @@ class BaseProduct(BaseModel):
     price: float = Field(
         description='Стоимость продукта',
     )
-    count: int = Field(
+    quantity: int = Field(
         description='Количество на складе',
     )
 

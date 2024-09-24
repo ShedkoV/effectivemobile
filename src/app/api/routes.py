@@ -23,7 +23,7 @@ def setup_routes(app: FastAPI):
     api_products_router.api_route(
         path='/',
         methods=['GET'],
-        response_model=ProductResponse,
+        response_model=list[ProductResponse],
     )(get_all_products)
 
     api_products_router.api_route(
@@ -49,7 +49,6 @@ def setup_routes(app: FastAPI):
         methods=['DELETE'],
         response_model=ProductResponse,
     )(delete_product_by_id)
-    app.include_router(api_products_router)
 
     api_orders_router = APIRouter(prefix='/orders', tags=['Orders'])
     api_orders_router.api_route(
@@ -61,7 +60,7 @@ def setup_routes(app: FastAPI):
     api_orders_router.api_route(
         path='/',
         methods=['GET'],
-        response_model=OrderResponse,
+        response_model=list[OrderResponse],
     )(get_all_orders)
 
     api_orders_router.api_route(
@@ -75,4 +74,6 @@ def setup_routes(app: FastAPI):
         methods=['PATCH'],
         response_model=OrderResponse,
     )(updated_order_status_by_id)
+
+    app.include_router(api_products_router)
     app.include_router(api_orders_router)

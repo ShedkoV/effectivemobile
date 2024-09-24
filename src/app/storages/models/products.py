@@ -1,13 +1,15 @@
 from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy.orm import mapped_column, Mapped, relationship
 
-from app.storages.models.base_model import Base
+from app.storages.models.base_model import BaseOrm
 
 
-class Product(Base):
+class ProductOrm(BaseOrm):
     __tablename__ = 'products'
 
-    name = Column(String, index=True)
-    description = Column(String)
-    price = Column(Float)
-    quantity = Column(Integer)
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    description: Mapped[str] = mapped_column(String)
+    price: Mapped[float] = mapped_column(Float, nullable=False)
+    quantity: Mapped[int] = mapped_column(Integer, nullable=False)
 
+    order_items = relationship("OrderItemOrm", back_populates="product")
