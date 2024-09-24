@@ -1,28 +1,27 @@
+from typing import Annotated
+
 from fastapi import Depends, HTTPException, Response, status
 from app.api.products.schemas import ProductResponse, ProductRequest
 from app.services.product_service import ProductService
 
 
-service_dependency = Depends(ProductService)
-
-
 async def get(
-    service: ProductService = service_dependency,
+    service: Annotated[ProductService, Depends()],
 ) -> list[ProductResponse]:
     """Get all content records."""
-    return await service.get_list_products()
+    return await service.get_all_items()
 
 
 async def get_by_id(
     product_id: int,
-    service: ProductService = service_dependency,
+    service: Annotated[ProductService, Depends()],
 ) -> ProductResponse:
     return await service.get_item(product_id)
 
 
 async def post(
     request: ProductRequest,
-    service: ProductService = service_dependency,
+    service: Annotated[ProductService, Depends()],
 ) -> ProductResponse:
     return await service.create(request)
 
@@ -30,23 +29,20 @@ async def post(
 async def put(
     product_id: int,
     request: ProductRequest,
-    service: ProductService = service_dependency,
+    service: Annotated[ProductService, Depends()],
 ) -> ProductResponse:
-    return ProductResponse(
-        id=product_id,
-        name=request.name,
-        description=request.description,
-        price=request.price,
-        count=request.count,
+    return await service.update(
+        obj_id=product_id,
+        request=request,
     )
 
 
 async def delete(
     product_id: int,
-    service: ProductService = service_dependency,
+    service: Annotated[ProductService, Depends()],
 ) -> Response:
     """Delete record by id."""
-    if not await service.delete(product_id=product_id):
+    if not await service.delete(product_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
