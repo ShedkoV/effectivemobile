@@ -28,9 +28,6 @@ WORKDIR $PYSETUP_PATH
 
 COPY poetry.lock pyproject.toml ./
 
-# Проверка установки Poetry
-RUN poetry --version
-
 RUN poetry install
 
 FROM python-base as production
