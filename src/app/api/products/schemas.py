@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pydantic import BaseModel, Field
 
 
@@ -30,6 +28,7 @@ class ProductRequest(BaseProduct):
 
 class ProductResponse(BaseProduct):
     """Ответ принятого заказаю."""
+
     id: int = Field(
         ...,
         description='Уникальный номер',
@@ -37,4 +36,5 @@ class ProductResponse(BaseProduct):
 
     class Config:
         """Orm mode on."""
+
         from_attributes = True

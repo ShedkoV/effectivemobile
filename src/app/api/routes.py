@@ -4,7 +4,7 @@ from app.api.orders.handler import get as get_all_orders
 from app.api.orders.handler import get_by_id as get_order_by_id
 from app.api.orders.handler import patch as updated_order_status_by_id
 from app.api.orders.handler import post as create_new_order
-from app.api.orders.schemas import OrderResponse
+from app.api.orders.schemas import OrderCreateResponse, OrderResponse
 from app.api.products.handler import delete as delete_product_by_id
 from app.api.products.handler import get as get_all_products
 from app.api.products.handler import get_by_id as get_product_by_id

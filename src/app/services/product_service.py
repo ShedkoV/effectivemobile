@@ -9,7 +9,8 @@ from app.storages.models import ProductOrm
 
 
 class ProductService(BaseService):
-    """Класс, для операций на эндпоинтах /orders"""
+    """Класс, для операций на эндпоинтах /orders."""
+
     def __init__(
         self,
         session: Annotated[AsyncSession, Depends(get_session)],
