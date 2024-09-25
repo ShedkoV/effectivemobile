@@ -50,7 +50,7 @@ def setup_routes(app: FastAPI):
     api_orders_router.api_route(
         path='/',
         methods=['POST'],
-        response_model=OrderResponse,
+        response_model=OrderCreateResponse,
     )(create_new_order)
 
     api_orders_router.api_route(
