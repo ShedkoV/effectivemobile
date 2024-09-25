@@ -11,6 +11,5 @@ class OrderItemOrm(BaseOrm):
     product_id: Mapped[int] = mapped_column(ForeignKey('products.id'))
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    order = relationship("OrderOrm", back_populates="order_items")
-    product = relationship("ProductOrm", back_populates="order_items")
-
+    order: Mapped['OrderOrm'] = relationship(back_populates='product_items')
+    product: Mapped['ProductOrm'] = relationship(back_populates='order_items')

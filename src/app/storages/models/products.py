@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy import Integer, String, Float
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 from app.storages.models.base_model import BaseOrm
@@ -12,4 +12,8 @@ class ProductOrm(BaseOrm):
     price: Mapped[float] = mapped_column(Float, nullable=False)
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    order_items = relationship("OrderItemOrm", back_populates="product")
+    order: Mapped[list['OrderOrm']] = relationship(
+        secondary='order_items',
+        back_populates="product",
+    )
+    order_items: Mapped[list['OrderItemOrm']] = relationship(back_populates='product')

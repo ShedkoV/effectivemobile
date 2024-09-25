@@ -19,4 +19,9 @@ class OrderOrm(BaseOrm):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     status: Mapped[OrderStatus]
 
-    order_items = relationship("OrderItemOrm", back_populates="order")
+    product: Mapped[list['ProductOrm']] = relationship(
+        secondary='order_items',
+        back_populates='order',
+    )
+
+    product_items: Mapped[list['OrderItemOrm']] = relationship(back_populates='order')
