@@ -1,5 +1,5 @@
-from sqlalchemy import Integer, ForeignKey
-from sqlalchemy.orm import relationship, Mapped, mapped_column
+from sqlalchemy import ForeignKey, Integer
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.storages.models.base_model import BaseOrm
 

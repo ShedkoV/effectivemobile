@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends
 
-from app.api.orders.schemas import OrderResponse, OrderRequest
+from app.api.orders.schemas import OrderRequest, OrderResponse
 from app.services.order_service import OrderService
 
 

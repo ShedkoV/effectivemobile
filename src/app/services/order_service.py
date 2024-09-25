@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import Depends, status, HTTPException
+from fastapi import Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.orders.schemas import OrderRequest

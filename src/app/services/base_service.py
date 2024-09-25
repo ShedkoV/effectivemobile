@@ -1,12 +1,13 @@
 from abc import ABC
 from typing import Optional
-from pydantic import BaseModel
 
+from fastapi import HTTPException, status
+from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.storages.models.base_model import BaseOrm
-from fastapi import status, HTTPException
 
 
 class BaseService(ABC):

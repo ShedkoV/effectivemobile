@@ -1,7 +1,8 @@
 from typing import Annotated
 
 from fastapi import Depends, HTTPException, Response, status
-from app.api.products.schemas import ProductResponse, ProductRequest
+
+from app.api.products.schemas import ProductRequest, ProductResponse
 from app.services.product_service import ProductService
 
 
