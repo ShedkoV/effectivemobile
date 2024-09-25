@@ -1,0 +1,30 @@
+services:
+  postgres:
+    image: bitnami/postgresql
+    environment:
+      - POSTGRES_DB=effective_warehouse
+      - POSTGRES_USER=shedko
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/bitnami/postgresql
+
+  init_service:
+    image: effectivemobile
+    working_dir: '/effectivemobile'
+    environment:
+      - PYTHONPATH=/effectivemobile/src
+      - POSTGRES_DB=effective_warehouse
+      - POSTGRES_USER=shedko
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST=5432
+    depends_on:
+      - postgres
+    volumes:
+      - "${PWD}/src:/effectivemobile"
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres_data:
