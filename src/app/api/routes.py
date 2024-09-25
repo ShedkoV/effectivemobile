@@ -1,6 +1,6 @@
 from fastapi import APIRouter, FastAPI
 
-from app.api.orders.schemas import OrderResponse
+from app.api.orders.schemas import OrderResponse, OrderCreateResponse
 from app.api.orders.handler import (
     get as get_all_orders,
     get_by_id as get_order_by_id,
@@ -54,7 +54,7 @@ def setup_routes(app: FastAPI):
     api_orders_router.api_route(
         path='/',
         methods=['POST'],
-        response_model=OrderResponse,
+        response_model=OrderCreateResponse,
     )(create_new_order)
 
     api_orders_router.api_route(

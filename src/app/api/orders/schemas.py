@@ -1,5 +1,5 @@
 from enum import Enum
-from datetime import date
+from datetime import date, datetime
 from typing import Optional
 
 from pydantic import BaseModel, Field
@@ -11,10 +11,28 @@ class OrderStatusEnum(str, Enum):
     DELIVERED = 'delivered'
 
 
-class BaseOrder(BaseModel):
+class OrderItem(BaseModel):
+    product_id: int = Field(
+        ...,
+        description='ID продукта'
+    )
+    quantity: int = Field(
+        ...,
+        description='Количество на складе',
+    )
+
+
+class OrderRequest(BaseModel):
     """..."""
 
-    created_at: Optional[date] = Field(
+    items: list[OrderItem] = Field(
+        description='Элементы заказа',
+    )
+
+
+class OrderRecord(BaseModel):
+    created_at: Optional[datetime] = Field(
+        ...,
         description='Дата заказа',
     )
     status: OrderStatusEnum = Field(
@@ -22,17 +40,23 @@ class BaseOrder(BaseModel):
         description='Статус заказа',
     )
 
+    class Config:
+        """Orm mode on."""
+        from_attributes = True
 
-class OrderRequest(BaseOrder):
-    """..."""
 
-
-class OrderResponse(BaseOrder):
+class OrderCreateResponse(OrderRecord):
     id: int = Field(
         ...,
         description='Уникальный номер',
     )
 
-    class Config:
-        """Orm mode on."""
-        from_attributes = True
+
+class OrderResponse(OrderRecord):
+    id: int = Field(
+        ...,
+        description='Уникальный номер',
+    )
+    items: list[OrderItem] = Field(
+        description='Элементы заказа',
+    )
