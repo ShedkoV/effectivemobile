@@ -17,6 +17,8 @@ mypy = "^1.11.2"
 wemake-python-styleguide = "^0.19.2"
 flake8-noqa = "^1.4.0"
 
+[tool.poetry.extras]
+lint = ["wemake-python-styleguide", "flake8-noqa"]
 
 [build-system]
 requires = ["poetry-core"]
