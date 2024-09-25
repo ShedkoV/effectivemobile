@@ -1,10 +1,12 @@
-from sqlalchemy import Integer, String, Float
-from sqlalchemy.orm import mapped_column, Mapped, relationship
+from sqlalchemy import Float, Integer, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.storages.models.base_model import BaseOrm
 
 
 class ProductOrm(BaseOrm):
+    """Модель записи элементов продукта."""
+
     __tablename__ = 'products'
 
     name: Mapped[str] = mapped_column(String, nullable=False)
@@ -14,6 +16,6 @@ class ProductOrm(BaseOrm):
 
     order: Mapped[list['OrderOrm']] = relationship(
         secondary='order_items',
-        back_populates="product",
+        back_populates='product',
     )
     order_items: Mapped[list['OrderItemOrm']] = relationship(back_populates='product')

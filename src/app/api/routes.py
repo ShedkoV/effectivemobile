@@ -1,23 +1,19 @@
 from fastapi import APIRouter, FastAPI
 
-from app.api.orders.schemas import OrderResponse, OrderCreateResponse
-from app.api.orders.handler import (
-    get as get_all_orders,
-    get_by_id as get_order_by_id,
-    post as create_new_order,
-    patch as updated_order_status_by_id,
-)
-from app.api.products.handler import (
-    get as get_all_products,
-    get_by_id as get_product_by_id,
-    post as create_new_product,
-    put as update_product_by_id,
-    delete as delete_product_by_id,
-)
+from app.api.orders.handler import get as get_all_orders
+from app.api.orders.handler import get_by_id as get_order_by_id
+from app.api.orders.handler import patch as updated_order_status_by_id
+from app.api.orders.handler import post as create_new_order
+from app.api.orders.schemas import OrderCreateResponse, OrderResponse
+from app.api.products.handler import delete as delete_product_by_id
+from app.api.products.handler import get as get_all_products
+from app.api.products.handler import get_by_id as get_product_by_id
+from app.api.products.handler import post as create_new_product
+from app.api.products.handler import put as update_product_by_id
 from app.api.products.schemas import ProductResponse
 
 
-def setup_routes(app: FastAPI):
+def setup_routes(app: FastAPI) -> None:
     """Setting up routers."""
     api_products_router = APIRouter(prefix='/products', tags=['Products'])
     api_products_router.api_route(

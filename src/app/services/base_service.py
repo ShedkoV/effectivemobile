@@ -1,12 +1,13 @@
 from abc import ABC
 from typing import Optional
-from pydantic import BaseModel
 
+from fastapi import HTTPException, status
+from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.storages.models.base_model import BaseOrm
-from fastapi import status, HTTPException
 
 
 class BaseService(ABC):
@@ -21,7 +22,7 @@ class BaseService(ABC):
         try:
             return await self._session.get(self._model, obj_id)
         except (OSError, SQLAlchemyError) as error_msg:
-            ...
+            print(error_msg)
 
     async def get_item(self, obj_id: int) -> Optional[BaseOrm]:
         """Возвращает объект модели из БД по `id` или ошибку `404`."""
@@ -37,7 +38,7 @@ class BaseService(ABC):
             select(self._model).order_by(self._model.id),
         )
 
-        return scalar_result.unique().all()
+        return scalar_result.unique().all()  # type: ignore[return-value]
 
     async def create(self, request: BaseModel) -> BaseOrm:
         """Saves the model record to the database."""

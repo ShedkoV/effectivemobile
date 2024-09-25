@@ -3,7 +3,7 @@ from sqlalchemy.orm import Mapped, as_declarative, declared_attr, mapped_column
 
 
 @as_declarative()
-class BaseOrm(object):
+class BaseOrm:
     """Базовая модель."""
 
     @declared_attr

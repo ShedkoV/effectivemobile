@@ -1,10 +1,12 @@
-from sqlalchemy import Integer, ForeignKey
-from sqlalchemy.orm import relationship, Mapped, mapped_column
+from sqlalchemy import ForeignKey, Integer
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.storages.models.base_model import BaseOrm
 
 
 class OrderItemOrm(BaseOrm):
+    """Модель записи элементов заказа."""
+
     __tablename__ = 'order_items'
 
     order_id: Mapped[int] = mapped_column(ForeignKey('orders.id'))

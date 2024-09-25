@@ -1,20 +1,24 @@
+from datetime import datetime
 from enum import Enum
-from datetime import date, datetime
 from typing import Optional
 
 from pydantic import BaseModel, Field
 
 
 class OrderStatusEnum(str, Enum):
+    """Перечисление статусов закзов."""
+
     IN_PROCESS = 'in_process'
     POSTED = 'posted'
     DELIVERED = 'delivered'
 
 
 class OrderItem(BaseModel):
+    """Элемент заказа."""
+
     product_id: int = Field(
         ...,
-        description='ID продукта'
+        description='ID продукта',
     )
     quantity: int = Field(
         ...,
@@ -22,8 +26,8 @@ class OrderItem(BaseModel):
     )
 
 
-class OrderRequest(BaseModel):
-    """..."""
+class BaseOrder(BaseModel):
+    """Базовый класс для запроса заказа в сервис и его ответа."""
 
     items: list[OrderItem] = Field(
         description='Элементы заказа',
@@ -31,6 +35,8 @@ class OrderRequest(BaseModel):
 
 
 class OrderRecord(BaseModel):
+    """Запрос на создание заказа."""
+
     created_at: Optional[datetime] = Field(
         ...,
         description='Дата заказа',
@@ -42,17 +48,22 @@ class OrderRecord(BaseModel):
 
     class Config:
         """Orm mode on."""
+
         from_attributes = True
 
 
 class OrderCreateResponse(OrderRecord):
+    """Ответ оформленного заказа."""
+
     id: int = Field(
         ...,
         description='Уникальный номер',
     )
 
 
-class OrderResponse(OrderRecord):
+class OrderResponse(BaseOrder):
+    """Ответ принятого заказаю."""
+
     id: int = Field(
         ...,
         description='Уникальный номер',

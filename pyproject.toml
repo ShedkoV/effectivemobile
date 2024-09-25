@@ -13,7 +13,12 @@ sqlalchemy = "^2.0"
 asyncpg = "^0.29.0"
 alembic = "^1.13.2"
 psycopg2 = "^2.9.9"
+mypy = "^1.11.2"
+wemake-python-styleguide = "^0.19.2"
+flake8-noqa = "^1.4.0"
 
+[tool.poetry.extras]
+lint = ["wemake-python-styleguide", "flake8-noqa"]
 
 [build-system]
 requires = ["poetry-core"]

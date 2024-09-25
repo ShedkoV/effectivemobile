@@ -1,7 +1,8 @@
 from typing import Annotated
 
 from fastapi import Depends, HTTPException, Response, status
-from app.api.products.schemas import ProductResponse, ProductRequest
+
+from app.api.products.schemas import ProductRequest, ProductResponse
 from app.services.product_service import ProductService
 
 
@@ -16,6 +17,7 @@ async def get_by_id(
     product_id: int,
     service: Annotated[ProductService, Depends()],
 ) -> ProductResponse:
+    """Получить продукт по его id."""
     return await service.get_item(product_id)
 
 
@@ -23,6 +25,7 @@ async def post(
     request: ProductRequest,
     service: Annotated[ProductService, Depends()],
 ) -> ProductResponse:
+    """Создать новый продукт."""
     return await service.create(request)
 
 
@@ -31,6 +34,7 @@ async def put(
     request: ProductRequest,
     service: Annotated[ProductService, Depends()],
 ) -> ProductResponse:
+    """Обнвить продукт по его id."""
     return await service.update(
         obj_id=product_id,
         request=request,
