@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 
 
 class BaseProduct(BaseModel):
-    """..."""
+    """Базовый класс для запроса продукта в сервис и его ответа."""
 
     name: str = Field(
         ...,
@@ -25,10 +25,11 @@ class BaseProduct(BaseModel):
 
 
 class ProductRequest(BaseProduct):
-    """..."""
+    """Запрос на создание продукта."""
 
 
 class ProductResponse(BaseProduct):
+    """Ответ принятого заказаю."""
     id: int = Field(
         ...,
         description='Уникальный номер',

@@ -12,4 +12,4 @@ class ProductOrm(BaseOrm):
     price: Mapped[float] = mapped_column(Float, nullable=False)
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    order_items = relationship("OrderItemOrm", back_populates="product")
+    order_items = relationship('OrderItemOrm', back_populates='product')

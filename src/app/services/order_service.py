@@ -10,6 +10,7 @@ from app.storages.models.orders import OrderOrm
 
 
 class OrderService(BaseService):
+    """Класс, для операций на эндпоинтах /orders"""
 
     def __init__(
         self,
@@ -18,6 +19,7 @@ class OrderService(BaseService):
         super().__init__(session, OrderOrm)
 
     async def update_status(self, order_id: int, request: OrderRequest) -> OrderOrm:
+        """Обновление статуса заказа по его id."""
         order = await self.get_item(order_id)
         if not order:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
