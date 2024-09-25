@@ -48,7 +48,7 @@ class OrderService(BaseService):
 
         return response
 
-    async def get_by_id(self, order_id):
+    async def get_by_id(self, order_id: int) -> OrderResponse:
         """Получить заказ по его id."""
         result = await self._session.execute(
             select(OrderOrm).options(

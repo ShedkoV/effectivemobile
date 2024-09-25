@@ -13,7 +13,7 @@ from app.api.products.handler import put as update_product_by_id
 from app.api.products.schemas import ProductResponse
 
 
-def setup_routes(app: FastAPI):
+def setup_routes(app: FastAPI) -> None:
     """Setting up routers."""
     api_products_router = APIRouter(prefix='/products', tags=['Products'])
     api_products_router.api_route(

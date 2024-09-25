@@ -38,7 +38,7 @@ class BaseService(ABC):
             select(self._model).order_by(self._model.id),
         )
 
-        return scalar_result.unique().all()
+        return scalar_result.unique().all()  # type: ignore[return-value]
 
     async def create(self, request: BaseModel) -> BaseOrm:
         """Saves the model record to the database."""
