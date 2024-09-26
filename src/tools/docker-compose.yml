@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: bitnami/postgresql
+    container_name: postgres_app
+    env_file:
+      - .env-non-dev
+    ports:
+      - "1221:5432"
+    networks:
+      - my_network
+
+  effectivemobile_service:
+    image: effectivemobile
+    container_name: effectivemobile_app
+    working_dir: '/effectivemobile'
+    env_file:
+      - .env-non-dev
+    depends_on:
+      - postgres
+    volumes:
+      - "${PWD}/src:/effectivemobile"
+    ports:
+      - "9999:8000"
+    networks:
+      - my_network
+
+networks:
+  my_network:

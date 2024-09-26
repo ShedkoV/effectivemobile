@@ -15,6 +15,7 @@ alembic = "^1.13.2"
 mypy = "^1.11.2"
 wemake-python-styleguide = "^0.19.2"
 flake8-noqa = "^1.4.0"
+python-dotenv = "^1.0.1"
 
 [tool.poetry.extras]
 lint = ["wemake-python-styleguide", "flake8-noqa"]
