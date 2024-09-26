@@ -26,7 +26,7 @@ class OrderItem(BaseModel):
     )
 
 
-class BaseOrder(BaseModel):
+class OrderRequest(BaseModel):
     """Базовый класс для запроса заказа в сервис и его ответа."""
 
     items: list[OrderItem] = Field(
@@ -61,7 +61,7 @@ class OrderCreateResponse(OrderRecord):
     )
 
 
-class OrderResponse(BaseOrder):
+class OrderResponse(OrderRecord):
     """Ответ принятого заказаю."""
 
     id: int = Field(
