@@ -4,8 +4,8 @@ from typing import Optional
 from fastapi import HTTPException, status
 from pydantic import BaseModel
 from sqlalchemy import select
-from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.storages.models.base_model import BaseOrm
 
@@ -13,45 +13,32 @@ from app.storages.models.base_model import BaseOrm
 class BaseService(ABC):
     """Базовый класс для реализации CRUD-операций у классов наследников."""
 
+    _relation_field = NotImplemented
+
     def __init__(self, session: AsyncSession, model: BaseOrm) -> None:
         self._session = session
         self._model = model
 
-    async def get_obj_or_none(self, obj_id: int) -> Optional[BaseOrm]:
-        """Возвращает объект модели из БД по `id` или `None` при отсутствии."""
-        try:
-            return await self._session.get(self._model, obj_id)
-        except (OSError, SQLAlchemyError) as error_msg:
-            print(error_msg)
-
     async def get_item(self, obj_id: int) -> Optional[BaseOrm]:
         """Возвращает объект модели из БД по `id` или ошибку `404`."""
-        target_obj = await self.get_obj_or_none(obj_id)
+        target_obj = await self._get_order_by_id(obj_id)
         if not target_obj:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f'Запись с данным id({obj_id}) не найдена',
+            )
 
         return target_obj
 
     async def get_all_items(self) -> list[BaseOrm]:
-        """Возвращает список всех объектов модели."""
-        scalar_result = await self._session.scalars(
-            select(self._model).order_by(self._model.id),
+        """Получить все элементы необходимой таблицы."""
+        result = await self._session.execute(
+            select(self._model).options(selectinload(self._relation_field)),
         )
-
-        return scalar_result.unique().all()  # type: ignore[return-value]
-
-    async def create(self, request: BaseModel) -> BaseOrm:
-        """Saves the model record to the database."""
-        async with self._session.begin():
-            operation = self._model(**request.dict())
-            self._session.add(operation)
-            await self._session.commit()
-        await self._session.refresh(operation)
-
-        return operation
+        return result.scalars().all()  # type: ignore[return-value]
 
     async def update(self, obj_id: int, request: BaseModel) -> Optional[BaseOrm]:
-        """Updating product."""
+        """Обновить запись по её `id`."""
         operation = await self.get_item(obj_id)
         if operation:
             for field, value in request.dict().items():
@@ -62,9 +49,16 @@ class BaseService(ABC):
         return operation
 
     async def delete(self, obj_id: int) -> Optional[BaseOrm]:
-        """Deleted product."""
+        """Удалить запись по её `id`."""
         operation = await self.get_item(obj_id)
         await self._session.delete(operation)
         await self._session.commit()
 
         return operation
+
+    async def _get_order_by_id(self, order_id: int) -> Optional[BaseOrm]:
+        """Получить зпапись по её `id`."""
+        result = await self._session.execute(
+            select(self._model).options(selectinload(self._relation_field)).filter(self._model.id == order_id),  # noqa: E501, WPS221
+        )
+        return result.scalar_one_or_none()
