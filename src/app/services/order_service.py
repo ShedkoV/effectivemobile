@@ -89,7 +89,7 @@ class OrderService(BaseService):
             order_item = OrderItemOrm(
                 order_id=new_order.id,
                 product_id=product.id,
-                quantity=product.quantity,
+                quantity=item.quantity,
             )
             self._session.add(order_item)
             await self._session.commit()
