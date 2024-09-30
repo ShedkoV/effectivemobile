@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends
 
-from app.api.orders.schemas import OrderCreateResponse, OrderRequest, OrderResponse
+from app.api.orders.schemas import OrderCreateResponse, OrderRequest, OrderResponse, OrderStatus
 from app.services.order_service import OrderService
 
 
@@ -29,7 +29,7 @@ async def get_by_id(
 
 async def patch(
     order_id: int,
-    request: OrderRequest,
+    request: OrderStatus,
     service: Annotated[OrderService, Depends()],
 ) -> OrderResponse:
     """Обновить статус существующего заказа."""

@@ -24,12 +24,9 @@ class OrderService(BaseService):
         super().__init__(session, OrderOrm)
         self._product_service = ProductService(session=session)
 
-    async def get_all(self) -> OrderResponse:
+    async def get_all(self) -> list[OrderResponse]:
         """Получить все заказы."""
-        result = await self._session.execute(
-            select(OrderOrm).options(selectinload(OrderOrm.product_items)),
-        )
-        orders = result.scalars().all()
+        orders = await self._get_orders()
 
         response = []
         for order in orders:
@@ -50,12 +47,7 @@ class OrderService(BaseService):
 
     async def get_by_id(self, order_id: int) -> OrderResponse:
         """Получить заказ по его id."""
-        result = await self._session.execute(
-            select(OrderOrm).options(
-                selectinload(OrderOrm.product_items),
-            ).filter(OrderOrm.id == order_id),
-        )
-        order = result.scalar_one_or_none()
+        order = await self._get_order_by_id(order_id)
         if order is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Order not found')
 
@@ -115,3 +107,17 @@ class OrderService(BaseService):
         await self._session.refresh(order)
 
         return order
+
+    async def _get_orders(self):
+        result = await self._session.execute(
+            select(OrderOrm).options(selectinload(OrderOrm.product_items)),
+        )
+        return result.scalars().all()
+
+    async def _get_order_by_id(self, order_id: int):
+        result = await self._session.execute(
+            select(OrderOrm).options(
+                selectinload(OrderOrm.product_items),
+            ).filter(OrderOrm.id == order_id),
+        )
+        return result.scalar_one_or_none()
