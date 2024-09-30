@@ -13,11 +13,10 @@ from app.storages.models.base_model import BaseOrm
 class BaseService(ABC):
     """Базовый класс для реализации CRUD-операций у классов наследников."""
 
-    _relation_field = NotImplemented
-
     def __init__(self, session: AsyncSession, model: BaseOrm) -> None:
         self._session = session
         self._model = model
+        self._relation_field = NotImplemented
 
     async def get_item(self, obj_id: int) -> Optional[BaseOrm]:
         """Возвращает объект модели из БД по `id` или ошибку `404`."""

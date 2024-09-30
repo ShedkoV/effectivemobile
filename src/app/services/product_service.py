@@ -12,13 +12,12 @@ from app.storages.models import ProductOrm
 class ProductService(BaseService):
     """Класс, для операций на эндпоинтах /orders."""
 
-    _relation_field = ProductOrm.order_items
-
     def __init__(
         self,
         session: Annotated[AsyncSession, Depends(get_session)],
     ) -> None:
         super().__init__(session, ProductOrm)
+        self._relation_field = ProductOrm.order_items
 
     async def create(self, request: ProductRequest) -> ProductOrm:
         """Saves the model record to the database."""

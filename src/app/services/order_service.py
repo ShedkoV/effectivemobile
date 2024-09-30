@@ -15,14 +15,13 @@ from app.storages.models.orders import OrderOrm
 class OrderService(BaseService):
     """Класс, для операций на эндпоинтах /orders."""
 
-    _relation_field = OrderOrm.product_items
-
     def __init__(
         self,
         session: Annotated[AsyncSession, Depends(get_session)],
     ) -> None:
         super().__init__(session, OrderOrm)
         self._product_service = ProductService(session=session)
+        self._relation_field = OrderOrm.product_items
 
     async def get_all(self) -> list[OrderResponse]:
         """Получить все заказы."""
