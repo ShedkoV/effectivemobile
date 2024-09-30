@@ -20,7 +20,7 @@ class BaseService(ABC):
 
     async def get_item(self, obj_id: int) -> Optional[BaseOrm]:
         """Возвращает объект модели из БД по `id` или ошибку `404`."""
-        target_obj = await self._get_order_by_id(obj_id)
+        target_obj = await self._get_obj_id_by_id(obj_id)
         if not target_obj:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -55,9 +55,9 @@ class BaseService(ABC):
 
         return operation
 
-    async def _get_order_by_id(self, order_id: int) -> Optional[BaseOrm]:
+    async def _get_obj_id_by_id(self, obj_id: int) -> Optional[BaseOrm]:
         """Получить зпапись по её `id`."""
         result = await self._session.execute(
-            select(self._model).options(selectinload(self._relation_field)).filter(self._model.id == order_id),  # noqa: E501, WPS221
+            select(self._model).options(selectinload(self._relation_field)).filter(self._model.id == obj_id),  # noqa: E501, WPS221
         )
         return result.scalar_one_or_none()

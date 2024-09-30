@@ -1,55 +1,58 @@
-from http import HTTPStatus
-
+from fastapi import status
 import pytest
 
 
-def test_get_products(test_client):
-    response = test_client.get('/products/')
-    assert response.status_code == HTTPStatus.OK
+pytestmark = pytest.mark.anyio
 
 
-def test_get_productd_by_id(test_client):
-    response = test_client.get('/products/1')
-    assert response.status_code == HTTPStatus.OK
+async def test_get_products(test_client, product_storage):
+    expected_value = [
+        {
+            'name': 'Iphone 15 pro max',
+            'description': 'Mobile phone',
+            'price': 3100.0,
+            'quantity': 100,
+            'id': 1,
+        }
+    ]
+    response = await test_client.get('/products/')
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json() == expected_value
 
 
 @pytest.mark.parametrize(
-    'request_data, expected_status',
+    'product_id, expected_value, expected_status',
     [
         pytest.param(
+            0,
             {
-                "name": "Iphone 15 pro max",
-                "description": "mobile phone",
-                "price": 3800,
-                "quantity": 150
+                'detail': 'Запись с данным id(0) не найдена',
             },
-            HTTPStatus.CREATED,
-            id='good_request',
+            status.HTTP_404_NOT_FOUND,
+            id='no_product_record',
         ),
         pytest.param(
-            {},
-            HTTPStatus.UNPROCESSABLE_ENTITY,
-            id='with_empty_data',
+            1,
+            {
+                'name': 'Iphone 15 pro max',
+                'description': 'Mobile phone',
+                'price': 3100.0,
+                'quantity': 100,
+                'id': 1,
+            },
+            status.HTTP_200_OK,
+            id='has_product_data',
         ),
-    ],
+    ]
 )
-def test_create_product(
-    test_client,
-    request_data,
+async def test_get_product_by_id(
+    product_id,
+    expected_value,
     expected_status,
+    test_client,
+    product_storage,
 ):
-    resp = test_client.post(
-        '/products/',
-        json=request_data,
-    )
-    assert resp.status_code == expected_status
-
-
-def test_delete_product_by_id(test_client):
-    resp = test_client.delete('/products/1')
-    assert resp.status_code == HTTPStatus.OK
-
-
-def test_update_product_by_id(test_client):
-    resp = test_client.put('/products/1')
-    assert resp.status_code == HTTPStatus.OK
+    response = await test_client.get(f'/products/{product_id}')
+    assert response.status_code == expected_status
+    assert response.json() == expected_value

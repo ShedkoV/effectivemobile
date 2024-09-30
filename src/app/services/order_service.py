@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.orders.schemas import OrderItem, OrderRequest, OrderResponse, OrderStatusEnum
 from app.services.base_service import BaseService
 from app.services.product_service import ProductService
-from app.storages.database import get_session
+from app.storages.database import get_async_session
 from app.storages.models import OrderItemOrm
 from app.storages.models.orders import OrderOrm
 
@@ -17,7 +17,7 @@ class OrderService(BaseService):
 
     def __init__(
         self,
-        session: Annotated[AsyncSession, Depends(get_session)],
+        session: Annotated[AsyncSession, Depends(get_async_session)],
     ) -> None:
         super().__init__(session, OrderOrm)
         self._product_service = ProductService(session=session)

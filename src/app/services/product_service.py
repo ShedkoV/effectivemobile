@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.products.schemas import ProductRequest
 from app.services.base_service import BaseService
-from app.storages.database import get_session
+from app.storages.database import get_async_session
 from app.storages.models import ProductOrm
 
 
@@ -14,7 +14,7 @@ class ProductService(BaseService):
 
     def __init__(
         self,
-        session: Annotated[AsyncSession, Depends(get_session)],
+        session: Annotated[AsyncSession, Depends(get_async_session)],
     ) -> None:
         super().__init__(session, ProductOrm)
         self._relation_field = ProductOrm.order_items
