@@ -34,16 +34,21 @@ class OrderRequest(BaseModel):
     )
 
 
-class OrderRecord(BaseModel):
+class OrderStatus(BaseModel):
+    """Класс для обновления статуса заказа."""
+
+    status: OrderStatusEnum = Field(
+        ...,
+        description='Статус заказа',
+    )
+
+
+class OrderRecord(OrderStatus):
     """Запрос на создание заказа."""
 
     created_at: Optional[datetime] = Field(
         ...,
         description='Дата заказа',
-    )
-    status: OrderStatusEnum = Field(
-        ...,
-        description='Статус заказа',
     )
 
     class Config:

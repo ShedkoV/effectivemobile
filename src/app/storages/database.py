@@ -21,7 +21,7 @@ async_session = sessionmaker(  # type: ignore[call-overload]
 )
 
 
-async def get_session() -> AsyncGenerator[AsyncSession, None]:
+async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
     """Getting a session to connect to the database."""
     async with async_session() as session:
         yield session
