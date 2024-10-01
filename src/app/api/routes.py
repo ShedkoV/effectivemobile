@@ -14,7 +14,7 @@ from app.api.products.schemas import ProductResponse
 
 
 def setup_routes(app: FastAPI) -> None:
-    """Setting up routers."""
+    """Устаовить роуты эндпоинтов."""
     api_products_router = APIRouter(prefix='/products', tags=['Products'])
     api_products_router.api_route(
         path='/',

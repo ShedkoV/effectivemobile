@@ -51,7 +51,7 @@ class OrderService(BaseService):
         return response
 
     async def get_by_id(self, order_id: int) -> OrderResponse:
-        """Получить заказ по его id."""
+        """Получить заказ по его 'id'."""
         order = await self.get_item(order_id)
         items = [
             OrderItem(product_id=item.product_id, quantity=item.quantity)
@@ -66,7 +66,7 @@ class OrderService(BaseService):
         )
 
     async def create_order(self, request: OrderRequest) -> OrderOrm:
-        """Создать новй заказ."""
+        """Создать новый заказ."""
         await self._validate_items(request.items)
 
         new_order = OrderOrm(
@@ -82,7 +82,7 @@ class OrderService(BaseService):
         return new_order
 
     async def update_status(self, order_id: int, request: OrderStatus) -> OrderOrm:
-        """Обновление статуса заказа по его id."""
+        """Обновление статуса заказа по его 'id'."""
         order = await self.get_item(order_id)
         order.status = request.status
         await self._session.commit()

@@ -52,7 +52,7 @@ class OrderRecord(OrderStatus):
     )
 
     class Config:
-        """Orm mode on."""
+        """Включение мода для работы ORM."""
 
         from_attributes = True
 

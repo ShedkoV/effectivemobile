@@ -35,6 +35,6 @@ class ProductResponse(BaseProduct):
     )
 
     class Config:
-        """Orm mode on."""
+        """Включение мода для работы ORM."""
 
         from_attributes = True
