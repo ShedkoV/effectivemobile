@@ -9,7 +9,7 @@ from app.services.product_service import ProductService
 async def get(
     service: Annotated[ProductService, Depends()],
 ) -> list[ProductResponse]:
-    """ Получить все продукты."""
+    """Получить все продукты."""
     return await service.get_all_items()
 
 
