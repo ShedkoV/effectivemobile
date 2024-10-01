@@ -6,6 +6,7 @@ from app.config.config import SERVICE_HOST, SERVICE_PORT
 
 
 def prepare_app() -> FastAPI:
+    """Подготовка приложения для его запуска."""
     app = FastAPI()
     setup_routes(app)
 
