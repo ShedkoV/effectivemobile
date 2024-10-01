@@ -9,7 +9,7 @@ from app.services.product_service import ProductService
 async def get(
     service: Annotated[ProductService, Depends()],
 ) -> list[ProductResponse]:
-    """Get all content records."""
+    """ Получить все продукты."""
     return await service.get_all_items()
 
 
@@ -17,7 +17,7 @@ async def get_by_id(
     product_id: int,
     service: Annotated[ProductService, Depends()],
 ) -> ProductResponse:
-    """Получить продукт по его id."""
+    """Получить продукт по его 'id'."""
     return await service.get_item(product_id)
 
 
@@ -34,7 +34,7 @@ async def put(
     request: ProductRequest,
     service: Annotated[ProductService, Depends()],
 ) -> ProductResponse:
-    """Обнвить продукт по его id."""
+    """Обнвить продукт по его 'id'."""
     return await service.update(
         obj_id=product_id,
         request=request,
@@ -45,7 +45,7 @@ async def delete(
     product_id: int,
     service: Annotated[ProductService, Depends()],
 ) -> Response:
-    """Delete record by id."""
+    """Удалить продукт по его 'id'."""
     if not await service.delete(product_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 

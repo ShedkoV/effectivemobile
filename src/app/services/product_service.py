@@ -20,7 +20,7 @@ class ProductService(BaseService):
         self._relation_field = ProductOrm.order_items
 
     async def create(self, request: ProductRequest) -> ProductOrm:
-        """Saves the model record to the database."""
+        """Создает навую модель продукта в БД."""
         async with self._session.begin():
             operation = self._model(**request.dict())
             self._session.add(operation)
