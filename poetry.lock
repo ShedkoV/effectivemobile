@@ -482,17 +482,18 @@ doc = ["Sphinx", "sphinx-rtd-theme", "sphinxcontrib-spelling"]
 
 [[package]]
 name = "faker"
-version = "30.0.0"
+version = "30.1.0"
 description = "Faker is a Python package that generates fake data for you."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "Faker-30.0.0-py3-none-any.whl", hash = "sha256:f0a60009150736c1c033bea31aa19ae63071c9dcf10adfaf9f1a87a3add84bc8"},
-    {file = "faker-30.0.0.tar.gz", hash = "sha256:bf0207af5777950054a2a3b43f4b5bdc33b585918d2b28f1dab52ac0ffe2bac0"},
+    {file = "Faker-30.1.0-py3-none-any.whl", hash = "sha256:dbf81295c948270a9e96cd48a9a3ebec73acac9a153d0c854fbbd0294557609f"},
+    {file = "faker-30.1.0.tar.gz", hash = "sha256:e0593931bd7be9a9ea984b5d8c302ef1cec19392585d1e90d444199271d0a94d"},
 ]
 
 [package.dependencies]
 python-dateutil = ">=2.4"
+typing-extensions = "*"
 
 [[package]]
 name = "fastapi"
@@ -1417,21 +1418,6 @@ tomli = {version = ">=1", markers = "python_version < \"3.11\""}
 dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
 
 [[package]]
-name = "pytest-anyio"
-version = "0.0.0"
-description = "The pytest anyio plugin is built into anyio. You don't need this package."
-optional = false
-python-versions = "*"
-files = [
-    {file = "pytest-anyio-0.0.0.tar.gz", hash = "sha256:b41234e9e9ad7ea1dbfefcc1d6891b23d5ef7c9f07ccf804c13a9cc338571fd3"},
-    {file = "pytest_anyio-0.0.0-py2.py3-none-any.whl", hash = "sha256:dc8b5c4741cb16ff90be37fddd585ca943ed12bbeb563de7ace6cd94441d8746"},
-]
-
-[package.dependencies]
-anyio = "*"
-pytest = "*"
-
-[[package]]
 name = "pytest-asyncio"
 version = "0.24.0"
 description = "Pytest support for asyncio"
@@ -1466,21 +1452,6 @@ pytest = ">=4.6"
 
 [package.extras]
 testing = ["fields", "hunter", "process-tests", "pytest-xdist", "virtualenv"]
-
-[[package]]
-name = "pytest-tornasync"
-version = "0.6.0.post2"
-description = "py.test plugin for testing Python 3.5+ Tornado code"
-optional = false
-python-versions = "*"
-files = [
-    {file = "pytest-tornasync-0.6.0.post2.tar.gz", hash = "sha256:d781b6d951a2e7c08843141d3ff583610b4ea86bfa847714c76edefb576bbe5d"},
-    {file = "pytest_tornasync-0.6.0.post2-py3-none-any.whl", hash = "sha256:4b165b6ba76b5b228933598f456b71ba233f127991a52889788db0a950ad04ba"},
-]
-
-[package.dependencies]
-pytest = ">=3.0"
-tornado = ">=5.0"
 
 [[package]]
 name = "pytest-trio"
@@ -1835,26 +1806,6 @@ files = [
 ]
 
 [[package]]
-name = "tornado"
-version = "6.4.1"
-description = "Tornado is a Python web framework and asynchronous networking library, originally developed at FriendFeed."
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "tornado-6.4.1-cp38-abi3-macosx_10_9_universal2.whl", hash = "sha256:163b0aafc8e23d8cdc3c9dfb24c5368af84a81e3364745ccb4427669bf84aec8"},
-    {file = "tornado-6.4.1-cp38-abi3-macosx_10_9_x86_64.whl", hash = "sha256:6d5ce3437e18a2b66fbadb183c1d3364fb03f2be71299e7d10dbeeb69f4b2a14"},
-    {file = "tornado-6.4.1-cp38-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e2e20b9113cd7293f164dc46fffb13535266e713cdb87bd2d15ddb336e96cfc4"},
-    {file = "tornado-6.4.1-cp38-abi3-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:8ae50a504a740365267b2a8d1a90c9fbc86b780a39170feca9bcc1787ff80842"},
-    {file = "tornado-6.4.1-cp38-abi3-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:613bf4ddf5c7a95509218b149b555621497a6cc0d46ac341b30bd9ec19eac7f3"},
-    {file = "tornado-6.4.1-cp38-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:25486eb223babe3eed4b8aecbac33b37e3dd6d776bc730ca14e1bf93888b979f"},
-    {file = "tornado-6.4.1-cp38-abi3-musllinux_1_2_i686.whl", hash = "sha256:454db8a7ecfcf2ff6042dde58404164d969b6f5d58b926da15e6b23817950fc4"},
-    {file = "tornado-6.4.1-cp38-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:a02a08cc7a9314b006f653ce40483b9b3c12cda222d6a46d4ac63bb6c9057698"},
-    {file = "tornado-6.4.1-cp38-abi3-win32.whl", hash = "sha256:d9a566c40b89757c9aa8e6f032bcdb8ca8795d7c1a9762910c722b1635c9de4d"},
-    {file = "tornado-6.4.1-cp38-abi3-win_amd64.whl", hash = "sha256:b24b8982ed444378d7f21d563f4180a2de31ced9d8d84443907a0a64da2072e7"},
-    {file = "tornado-6.4.1.tar.gz", hash = "sha256:92d3ab53183d8c50f8204a51e6f91d18a15d5ef261e84d452800d4ff6fc504e9"},
-]
-
-[[package]]
 name = "trio"
 version = "0.26.2"
 description = "A friendly Python library for async concurrency and I/O"
@@ -2025,9 +1976,9 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 
 [extras]
 lint = ["flake8-noqa", "wemake-python-styleguide"]
-tests = ["factory-boy", "pytest-asyncio", "pytest-cov"]
+tests = ["factory-boy", "pytest-cov"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "f64e5f0f8d19b0dc6f929349da14f58d9dde943eab4165ea38797c15157b9854"
+content-hash = "3df8bafa28970625a07fe4331be2baa847392ebc10e0b36f1a3da4cda236f4cb"

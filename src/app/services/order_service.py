@@ -4,7 +4,13 @@ from typing import Annotated
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.orders.schemas import OrderItem, OrderRequest, OrderResponse, OrderStatusEnum
+from app.api.orders.schemas import (
+    OrderItem,
+    OrderRequest,
+    OrderResponse,
+    OrderStatus,
+    OrderStatusEnum,
+)
 from app.services.base_service import BaseService
 from app.services.product_service import ProductService
 from app.storages.database import get_async_session
@@ -75,7 +81,7 @@ class OrderService(BaseService):
 
         return new_order
 
-    async def update_status(self, order_id: int, request: OrderRequest) -> OrderOrm:
+    async def update_status(self, order_id: int, request: OrderStatus) -> OrderOrm:
         """Обновление статуса заказа по его id."""
         order = await self.get_item(order_id)
         order.status = request.status

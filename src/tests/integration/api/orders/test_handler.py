@@ -1,50 +1,171 @@
-from http import HTTPStatus
-
+from fastapi import status
 import pytest
 
+from app.api.orders.schemas import OrderStatusEnum
+from tests.conftest import datetime_now
 
-def test_get_orders(test_client):
-    response = test_client.get('/orders/')
-    assert response.status_code == HTTPStatus.OK
+pytestmark = pytest.mark.anyio
 
 
-def test_get_order_by_id(test_client):
-    response = test_client.get('/orders/1')
-    assert response.status_code == HTTPStatus.OK
+async def test_get(
+    test_client,
+    product_storage,
+    order_storage
+):
+    expected_value = [
+        {
+            'status': 'in_process',
+            'description': datetime_now,
+            'id': 1,
+            'items': [
+                {'product_id': 1, 'quantity': 5}
+            ],
+        }
+    ]
+    response = await test_client.get('/orders/')
+    assert response.status_code == status.HTTP_200_OK
+    raise ValueError(
+        response.json(),
+        expected_value
+    )
+    assert response.json() == expected_value
 
 
 @pytest.mark.parametrize(
-    'request_data, expected_status',
+    'order_id, expected_value, expected_status',
     [
         pytest.param(
+            0,
             {
-                "name": "Iphone 15 pro max",
-                "description": "mobile phone",
-                "price": 3800,
-                "quantity": 150
+                'detail': 'Запись с данным id(0) не найдена',
             },
-            HTTPStatus.CREATED,
-            id='good_request',
+            status.HTTP_404_NOT_FOUND,
+            id='no_order_record',
         ),
         pytest.param(
-            {},
-            HTTPStatus.UNPROCESSABLE_ENTITY,
-            id='with_empty_data',
+            1,
+            {
+                'status': 'in_process',
+                'created_at': datetime_now,
+                'id': 1,
+                'items': [
+                    {
+                        'product_id': 1,
+                        'quantity': 5
+                    }
+                ]
+            },
+            status.HTTP_200_OK,
+            id='has_record_data',
         ),
-    ],
+    ]
 )
-def test_create_order(
-    test_client,
-    request_data,
+async def get_by_id(
+    order_id,
+    expected_value,
     expected_status,
+    test_client,
+    product_storage,
+    order_storage,
 ):
-    resp = test_client.post(
-        '/orders',
-        json=request_data,
+    response = await test_client.get(f'/orders/{order_id}')
+    assert response.status_code == expected_status
+    assert response.json() == expected_value
+
+
+@pytest.mark.parametrize(
+    'request_json, expected_value, expected_status',
+    pytest.param(
+        None,
+        {
+            'detail': [
+                {
+                    'type': 'missing',
+                    'loc': [
+                        'body'
+                    ],
+                    'msg': 'Field required',
+                    'input': None
+                }
+            ]
+        },
+        status.HTTP_422_UNPROCESSABLE_ENTITY,
+        id='empty_request_json',
+    ),
+    pytest.param(
+        {
+            'items': [
+                {
+                    'product_id': 1,
+                    'quantity': 10
+                },
+            ],
+        },
+        {
+            'status': 'in_process',
+            'created_at': datetime_now,
+            'id': 1
+        },
+        status.HTTP_200_OK,
+        id='correct_order_record',
+    ),
+)
+async def test_post(
+    request_json,
+    expected_value,
+    expected_status,
+    test_client,
+):
+    response = await test_client.post('/orders/', json=request_json)
+    assert response.status_code == expected_status
+    assert response.json() == expected_value
+
+
+@pytest.mark.parametrize(
+    'order_id, request_json, expected_value, expected_status',
+    pytest.param(
+        1112121,
+        {
+            "status": OrderStatusEnum.POSTED.value,
+        },
+        {
+            "detail": "Запись с данным id(1111) не найдена"
+        },
+        status.HTTP_404_NOT_FOUND,
+        id='id_not_founded',
+
+    ),
+    pytest.param(
+        1,
+        {
+            "status": OrderStatusEnum.POSTED.value,
+        },
+        {
+            "status": OrderStatusEnum.POSTED.value,
+            "created_at": datetime_now,
+            "id": 1,
+            "items": [
+                {
+                    "product_id": 1,
+                    "quantity": 5
+                }
+            ]
+        },
+        status.HTTP_200_OK,
+        id='edited_record',
+    ),
+)
+async def patch(
+    order_id,
+    request_json,
+    expected_value,
+    expected_status,
+    order_storage,
+    test_client,
+):
+    response = await test_client.patch(
+        f'/orders/{order_id}/status/',
+        json=request_json
     )
-    assert resp.status_code == expected_status
-
-
-def test_delete_product_by_id(test_client):
-    resp = test_client.patch('/products/1/status')
-    assert resp.status_code == HTTPStatus.OK
+    assert response.status_code == expected_status
+    assert response.json() == expected_value

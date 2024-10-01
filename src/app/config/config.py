@@ -4,6 +4,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+SERVICE_HOST = os.environ.get('SERVICE_HOST')
+SERVICE_PORT = os.environ.get('SERVICE_PORT')
+
 DB_HOST = os.environ.get('DB_HOST')
 DB_PORT = os.environ.get('DB_PORT')
 DB_NAME = os.environ.get('DB_NAME')

@@ -1,17 +1,19 @@
 import asyncio
-from typing import AsyncGenerator, Generator, Any
+from datetime import datetime
+from typing import Any, AsyncGenerator, Generator
+
 import pytest
 from fastapi import FastAPI
 from httpx import AsyncClient
-from sqlalchemy import NullPool, MetaData
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy import MetaData, NullPool
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.config.config import DB_NAME_TEST, DB_PORT_TEST, DB_HOST_TEST, DB_PASS_TEST, DB_USER_TEST, DB_NAME, DB_PORT, \
-    DB_HOST, DB_PASS, DB_USER
+from app.api.orders.schemas import OrderStatusEnum
+from app.config.config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER
 from app.service import prepare_app
 from app.storages.database import get_async_session
-from app.storages.models import ProductOrm
+from app.storages.models import OrderItemOrm, OrderOrm, ProductOrm
 from app.storages.models.base_model import BaseOrm
 
 app: FastAPI = prepare_app()
@@ -27,6 +29,7 @@ async_session_maker = sessionmaker(
     expire_on_commit=False,
 )
 metadata.bind = engine_test
+datetime_now = datetime.utcnow()
 
 
 async def override_get_async_session() -> AsyncGenerator[AsyncSession, None]:
@@ -47,6 +50,23 @@ async def product_storage():
     )
     async with async_session_maker() as session, session.begin():
         session.add(order)
+
+
+@pytest.fixture
+async def order_storage():
+    """Создает тестовые данные."""
+    order = OrderOrm(
+        created_at=datetime.utcnow(),
+        status=OrderStatusEnum.IN_PROCESS.value
+    )
+    order_item = OrderItemOrm(
+        order_id=1,
+        product_id=1,
+        quantity=5,
+    )
+    async with async_session_maker() as session, session.begin():
+        session.add(order)
+        session.add(order_item)
 
 
 @pytest.fixture(autouse=True, scope='session')
